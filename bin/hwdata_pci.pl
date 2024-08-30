@@ -2,14 +2,14 @@
 
 use strict;
 use warnings;
+use feature qw(say);
 
 use HWDATA::PCI;
 
-
 my $pci = HWDATA::PCI->new;
-my $lspci = $pci->get_lspci;
-
-for my $device (sort keys %$lspci) {
+my $devices = $pci->get_hwdata_devices;
+for my $device ( sort keys %$devices ) {
     my $device_name = $pci->get_devicename($device);
-    print "[$device] $device_name\n";
+    say "[$device] $device_name";
 }
+

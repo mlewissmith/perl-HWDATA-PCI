@@ -7,7 +7,7 @@ package HWDATA::PCI;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.1.0';
 
 =head1 NAME
 
@@ -17,12 +17,11 @@ HWDATA::PCI - perl interface to HWDATA PCI data
 
     use HWDATA::PCI;
 
-    my $pci = HWDATA::PCI->new;
-    my $lspci = $pci->get_lspci;
+    $pci = HWDATA::PCI->new;
+    $devices = $pci->get_hwdata_devices;
 
-    for my $device (sort keys %$lspci) {
-        my $device_name = $pci->get_devicename($device);
-        print "[$device] $device_name\n";
+    for ( sort keys %$devices ) {
+        $device_name = $pci->get_devicename($_);
     }
 
 =head1 DESCRIPTION
@@ -44,7 +43,7 @@ TBD
 
 =item B<< new( {ids => '/usr/share/hwdata/pci.ids'} ) >>
 
-Constructor.  Build B<lspci> and B<hwdata> internal hashes.
+Constructor.  Build B<hwdata> internal hashes.
 
 =cut
 
@@ -53,12 +52,10 @@ sub new {
     my $self = {
         ids => $args->{ids} || '/usr/share/hwdata/pci.ids',
         hwdata => undef,
-        lspci => undef,
     };
     my $blessed = bless $self, $class;
 
     $self->{hwdata} = _hwdata($self->{ids});
-    $self->{lspci} = _lspci();
 
     return $blessed;
 }
@@ -83,6 +80,10 @@ sub get_devicename {
 
 =item B<< get_hwdata >>
 
+=item B<< get_hwdata_devices >>
+
+=item B<< get_hwdata_vendors >>
+
 Parsed hwdata C<pci.ids> file, returned as hashref:
 
    {
@@ -99,33 +100,20 @@ sub get_hwdata {
     return $self->{hwdata};
 }
 
-=item B<< get_lspci >>
-
-Parsed output from C<lspci -n -vmm>, returned as hashref:
-
-    {
-        'HEX:HEX' => [ { 'tag' => 'value' }, ... ]
-    }
-
-Note: primary key is C<< $pcivendor:$pcidevice >> containg array of B<< lspci >>
-tag:value pairs, one per device installed.
-
-Note: the B<lspci> hash is built at contruction time, see L</Internals>.
-
-=cut
-
-sub get_lspci {
+sub get_hwdata_devices {
     my $self = shift;
-    return $self->{lspci};
+    return $self->{hwdata}{devices};
 }
 
+sub get_hwdata_vendors {
+    my $self = shift;
+    return $self->{hwdata}{vendors};
+}
 
 =back
 
 =cut
 
-################################################################################
-################################################################################
 ################################################################################
 ################################################################################
 
@@ -148,7 +136,7 @@ sub _hwdata {
         chomp $line;
         $line =~ s/\#.+//;
         next unless $line;
-        next if ($line =~ m/^C\s/);
+        last if ($line =~ m/^C\s/); ## ABORT once we reach the device class stuff
         if ( $line =~ m/^\s{0}([[:xdigit:]]+)\s+(.+)$/ ) {
             $pci_vendor_id = $1;
             $pci_vendor_name = $2;
@@ -162,30 +150,6 @@ sub _hwdata {
     }
     close $fh or die "${datafile}: $!";
     return \%pci;
-}
-
-=item B<< _lspci >>
-
-Run C<< lspci -vmm -n >>, parse, return hashref.
-
-=cut
-
-sub _lspci {
-    my %devices = ();
-    my %device = ();
-    for my $line ( qx[lspci -vmm -n] ) {
-        chomp $line;
-        if (length($line)) {
-            if ($line =~ m{^(\S+):\s*(\S+)\s*$}) {
-                $device{$1} = $2;
-            }
-        } else {
-            ## blank line terminates record
-            push @{ $devices{"$device{Vendor}:$device{Device}"} }, {%device};
-            %device = ();
-        }
-    }
-    return \%devices;
 }
 
 =back
