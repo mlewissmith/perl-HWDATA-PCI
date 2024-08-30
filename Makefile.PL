@@ -13,6 +13,6 @@ WriteMakefile(
     AUTHOR              => 'Magnus Lewis-Smith <ccsgac@csc.warwick.ac.uk>',
     VERSION_FROM        => 'lib/HWDATA/PCI.pm',
     ABSTRACT_FROM       => 'lib/HWDATA/PCI.pm',
-    LICENSE             => 'restricted',
+    LICENSE             => 'unrestricted',
     EXE_FILES           => [ glob "./bin/*" ],
 );
