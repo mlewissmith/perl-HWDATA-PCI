@@ -14,4 +14,5 @@ WriteMakefile(
     VERSION_FROM        => 'lib/HWDATA/PCI.pm',
     ABSTRACT_FROM       => 'lib/HWDATA/PCI.pm',
     LICENSE             => 'restricted',
+    EXE_FILES           => [ glob "./bin/*" ],
 );
