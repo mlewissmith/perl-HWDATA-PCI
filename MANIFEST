@@ -1,4 +1,5 @@
+bin/test_hwdata_pci.pl
 lib/HWDATA/PCI.pm
 Makefile.PL
-MANIFEST			This list of files
+MANIFEST
 README
