@@ -1,4 +1,9 @@
 package HWDATA::PCI;
+
+# OO-PERL REFERENCES
+# https://perldoc.perl.org/perlootut
+# https://www.perl.com/article/25/2013/5/20/Old-School-Object-Oriented-Perl/
+
 use strict;
 use warnings;
 
