@@ -47,7 +47,8 @@ HWDATA::PCI - perl interface to HWDATA PCI data
 
 =head1 DESCRIPTION
 
-TBD
+Provide perl interface to HWDATA PCI data as stored at C<<
+/usr/share/hwdata/pci.ids >> (or system equivalent)
 
 =cut
 
