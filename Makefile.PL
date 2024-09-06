@@ -8,11 +8,36 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
-WriteMakefile(
-    NAME                => 'HWDATA::PCI',
-    AUTHOR              => 'Magnus Lewis-Smith <ccsgac@csc.warwick.ac.uk>',
-    VERSION_FROM        => 'lib/HWDATA/PCI.pm',
-    ABSTRACT_FROM       => 'lib/HWDATA/PCI.pm',
-    LICENSE             => 'unrestricted',
-    EXE_FILES           => [ glob "./bin/*" ],
-);
+use Data::Dumper;
+
+my $pmfile = 'lib/HWDATA/PCI.pm';
+my %pl_files;
+
+## Distribution files which can be built *without* appealing to git
+$pl_files{'DISTFILES.PL'} = {
+    README  => [$pmfile],
+    VERSION => [$pmfile],
+    CHANGELOG => [],
+};
+
+sub MY::postamble {
+    my @makefile;
+
+    ## define dummy target for DISTFILES
+    my $distfiles = join(' ', sort keys %{ $pl_files{'DISTFILES.PL'} } );
+    push @makefile, <<"__DISTFILES__";
+.PHONY: DISTFILES
+DISTFILES: $distfiles
+__DISTFILES__
+
+    return join("\n", @makefile);
+}
+
+WriteMakefile( NAME           => 'HWDATA::PCI',
+               AUTHOR         => 'Magnus Lewis-Smith <mlewissmith@users.noreply.github.com>',
+               VERSION_FROM   => $pmfile,
+               ABSTRACT_FROM  => $pmfile,
+               LICENSE        => 'unrestricted',
+               EXE_FILES      => [ glob "./bin/*" ],
+               PL_FILES       => \%pl_files,
+    );

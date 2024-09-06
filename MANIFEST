@@ -1,5 +1,8 @@
+CHANGELOG
 contrib/hwdata_pci.pl
+DISTFILES.PL
 lib/HWDATA/PCI.pm
 Makefile.PL
 MANIFEST
 README
+VERSION
