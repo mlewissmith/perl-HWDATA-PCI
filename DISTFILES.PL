@@ -23,7 +23,7 @@ for ($target) {
     /README/ and do {
         pod2usage( -output => $target,
                    -input => $deps[0],
-                   -sections => "NAME|SYNOPSIS|DESCRIPTION",
+                   -sections => "NAME|DESCRIPTION",
                    -verbose => 99,
                    -exitval => 'NOEXIT' );
         last;

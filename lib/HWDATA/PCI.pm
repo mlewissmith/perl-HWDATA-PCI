@@ -57,13 +57,15 @@ Provide perl interface to HWDATA PCI data as stored at C<<
 ################################################################################
 ################################################################################
 
+=head1 API
+
 =head2 Methods
 
 =over
 
 =item B<< new >>
 
-=item B<< new( {pciids => '/usr/share/hwdata/pci.ids'} ) >>
+=item B<< new( { pciids => 'I</usr/share/hwdata/pci.ids>' } ) >>
 
 Constructor.  Build B<hwdata> internal hashes.
 
@@ -82,9 +84,9 @@ sub new {
     return $blessed;
 }
 
-=item B<< get_name >>( "I<< VENDOR >>[:I<< DEVICE >>[:I<< CLASS >>]]" )
+=item B<< get_name( "I<< VENDOR >>[:I<< DEVICE >>[:I<< CLASS >>]]" ) >>
 
-=item B<< get_name >>( "[I<< VENDOR >>]:[I<< DEVICE >>]:I<< CLASS >>" )
+=item B<< get_name( "[I<< VENDOR >>]:[I<< DEVICE >>]:I<< CLASS >>" ) >>
 
 Return formatted device/class name given hex values.
 
@@ -182,7 +184,7 @@ sub get_hwdata_classes {
 
 =over
 
-=item B<< _hwdata >>( I<< DATAFILE >> ) 
+=item B<< _hwdata( I<< DATAFILE >> ) >>
 
 Read hwdata C<< pci.ids >> file, parse, return hashref.
 

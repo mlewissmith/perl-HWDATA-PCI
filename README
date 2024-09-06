@@ -1,68 +1,7 @@
 Name:
     HWDATA::PCI - perl interface to HWDATA PCI data
 
-Usage:
-        use HWDATA::PCI;
-
-        $pci = HWDATA::PCI->new;
-        $hwdata = $pci->get_hwdata;
-        $vendors = $pci->get_hwdata_vendors;
-        $devices = $pci->get_hwdata_devices;
-        $classes = $pci->get_hwdata_classes;
-
-        ## vendors
-        for $v (sort keys %$vendors) {
-            say "[$v] $vendors->{$v}";
-            ## equivalent
-            say "[$v] " . $pci->get_name($v);
-        }
-
-        ## devices
-        for $d (sort keys %$devices) {
-            say "[$d] $devices->{$d}";
-            ## equivalent...ish, a bit more verbose
-            say "[$d] " . $pci->get_name($d);
-        }
-
-        ## classes
-        for $c (sort keys %$classes) {
-            say "[$c] $classes->{$c}";
-            ## equivalent
-            say "[$c] " . $pci->get_name("::$c");
-        }
-
 Description:
     Provide perl interface to HWDATA PCI data as stored at
     "/usr/share/hwdata/pci.ids" (or system equivalent)
-
-  Methods:
-    new
-    new( {pciids => '/usr/share/hwdata/pci.ids'} )
-        Constructor. Build hwdata internal hashes.
-
-    get_name( "VENDOR[:DEVICE[:CLASS]]" )
-    get_name( "[VENDOR]:[DEVICE]:CLASS" )
-        Return formatted device/class name given hex values.
-
-            print $pci->get_devicename("10de:1fb0")
-            NVIDIA Corporation TU117GLM [Quadro T1000 Mobile]
-
-    get_hwdata
-    get_hwdata_vendors
-    get_hwdata_devices
-    get_hwdata_classes
-        Parsed hwdata "pci.ids" file, returned as hashref:
-
-           {
-                'vendors' => { 'HEX' => 'VENDOR_NAME', ... },
-                'devices' => { 'HEX:HEX' => 'DEVICE_NAME', ... }
-                'classes' => { 'HEX' => 'CLASS_NAME', ... }
-           }
-
-        Note: the hwdata hash is built at construction time, see
-        "Internals".
-
-  Internals:
-    _hwdata( DATAFILE )
-        Read hwdata "pci.ids" file, parse, return hashref.
 
