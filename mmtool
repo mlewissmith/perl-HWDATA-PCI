@@ -21,7 +21,6 @@ use feature 'say';
 use FindBin qw($Bin $Script);
 use lib "$Bin/blib", "$Bin/lib";
 
-use Carp;
 use File::Which;
 use Pod::Usage;
 
@@ -115,6 +114,7 @@ sub touchfile {
 if ($debug) {
     qsay_system qq(pod2html $Script > ${Script}.1.html);
     qsay_system qq(pod2man $Script > ${Script}.1);
+    qsay_system qq(groff -man ${Script}.1 > ${Script}.1);
 }
 
 __END__
@@ -160,13 +160,19 @@ Equivalent to C<< perl Makefile.PL I<ARGS> >>
 
 =head1 NOTES
 
-Disable L<ExtUtils::MakeMaker> CPAN cruft per L<[1]|/https://metacpan.org/pod/ExtUtils::MakeMaker>
+=over
+
+=item Disable L<ExtUtils::MakeMaker> CPAN cruft per
+      L<[1]|/https://metacpan.org/pod/ExtUtils::MakeMaker>
 
    perl Makefile.PL NO_META=1 NO_MYMETA=1
 
-Build for Fedora/RedHat per L<[3]|/https://fedoraproject.org/wiki/Perl/Tips>
+=item Build for Fedora/RedHat per
+      L<[3]|/https://fedoraproject.org/wiki/Perl/Tips>
 
    perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
+
+=back
 
 =head1 SEE ALSO
 
@@ -177,6 +183,8 @@ Build for Fedora/RedHat per L<[3]|/https://fedoraproject.org/wiki/Perl/Tips>
 =item [2] L<https://docs.fedoraproject.org/en-US/packaging-guidelines/Perl/>
 
 =item [3] L<https://fedoraproject.org/wiki/Perl/Tips>
+
+=item [4] L<https://semver.org/>
 
 =back
 
