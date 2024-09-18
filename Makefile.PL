@@ -10,6 +10,7 @@ use ExtUtils::MakeMaker;
 
 use Data::Dumper;
 
+my $pmname = 'HWDATA::PCI';
 my $pmfile = 'lib/HWDATA/PCI.pm';
 my %pl_files;
 
@@ -33,7 +34,7 @@ __DISTFILES__
     return join("\n", @makefile);
 }
 
-WriteMakefile( NAME           => 'HWDATA::PCI',
+WriteMakefile( NAME           => $pmname,
                AUTHOR         => 'Magnus Lewis-Smith <mlewissmith@users.noreply.github.com>',
                VERSION_FROM   => $pmfile,
                ABSTRACT_FROM  => $pmfile,

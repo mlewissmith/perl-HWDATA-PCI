@@ -11,8 +11,8 @@ my $pmversion = version->parse($HWDATA::PCI::VERSION)->normal;
 
 
 ## ARGV == ($target, @dependecies)
-my $target = $ARGV[0];
-my @deps = @ARGV[1..$#ARGV];
+our $target = $ARGV[0];
+our @deps = @ARGV[1..$#ARGV];
 
 for ($target) {
     /VERSION/ and do {
@@ -35,11 +35,6 @@ for ($target) {
     # fallthru
     warn "unsupported target '$_'";
 }
-
-################################################################################
-################################################################################
-################################################################################
-################################################################################
 
 sub writefile {
     my $outfile = shift;
