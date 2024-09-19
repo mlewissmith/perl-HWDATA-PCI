@@ -7,7 +7,7 @@ package HWDATA::PCI;
 use strict;
 use warnings;
 
-our $VERSION = '1.0.0';
+our $VERSION = '1.0.1';
 
 =head1 NAME
 
@@ -127,7 +127,7 @@ sub get_name {
         } else {
             $class_name = $class_id;
         }
-        unshift @returnstrs, ${class_name};
+        push @returnstrs, "(${class_name})";
     }
 
     return join(" ", @returnstrs);
@@ -221,13 +221,15 @@ sub _hwdata {
             $recordtype = "class";
             $pci_class_id = $1;
             $pci_class_name = $2;
-            #$pci{classes}{"${pci_class_id}"} = "${pci_class_name}";
         }
         ## PCI Subclass (iff recordtype == "class")
-        if ( $line =~ m{^\s+([[:xdigit:]]{2})\s+(.+)$} and $recordtype eq "class") {
+        if ( $line =~ m{^\s{1}([[:xdigit:]]{2})\s+(.+)$} and $recordtype eq "class") {
             $pci_subclass_id = $1;
             $pci_subclass_name = $2;
-            $pci{classes}{"${pci_class_id}${pci_subclass_id}"} = "${pci_class_name}[${pci_subclass_name}]";
+            ### eg "0300" => "Display controller[VGA compatible controller]"
+            # $pci{classes}{"${pci_class_id}${pci_subclass_id}"} = "${pci_class_name}[${pci_subclass_name}]";
+            ### eg "0300" => "VGA compatible controller"
+            $pci{classes}{"${pci_class_id}${pci_subclass_id}"} = "${pci_subclass_name}";
         }
     }
     close $fh or die "${datafile}: $!";
